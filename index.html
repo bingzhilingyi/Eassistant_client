@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+
+<head>
+    <title> </title>
+    <link rel="stylesheet" href="src/qa/jquery-ui.min.css">
+    <link rel="stylesheet" href="src/qa/style.css">
+    <script src="src/qa/jquery.min.js"></script>
+    <script src="src/qa/markdown.min.js"></script>
+    <script src="src/qa/jquery-ui.min.js"></script>
+</head>
+
+<body>
+    <div class="qaSystem" id="qaSystem">
+        <div id="qaSettingDiv" class="qaSettingDiv">
+            <div id="QaDomainDiv" class="QaDomainDiv">
+                <p class="domainNotice">设置您的查询范围:</p>
+                <ul>
+                    <li><input name="domain" type="checkbox" value="SRM" onclick="qaSystem.setDomain()" checked/> SRM</li>
+                    <li><input name="domain" type="checkbox" value="PAY" onclick="qaSystem.setDomain()" checked/> 支付</li>
+                    <li><input name="domain" type="checkbox" value="WZ" onclick="qaSystem.setDomain()" checked/> 物资</li>
+                    <li><input name="domain" type="checkbox" value="XM" onclick="qaSystem.setDomain()" checked/> 项目</li>
+                </ul>
+            </div>
+            <div onclick="qaSystem.qa_config()" class="qaSettingBtn2">隐藏</div>
+        </div>
+        <div id="QaShowDiv" class="QaShowDiv"></div>
+        <div class="QaSearchDiv">
+            <input id='qa_value' placeholder="您想查询什么..." onkeydown="return qaSystem.qa_handlesearch(event)"></input>
+            <div class="qa_search_btn" onclick="qaSystem.qa_search()">查询</div>
+            <image src="src/qa/icon/settings.png" class="qaSettingBtn" id="qaSettingBtn" onclick="qaSystem.qa_config()"></image>
+            <image src="src/qa/icon/trashfull.png" class="qaSettingBtn" id="qaSettingBtn" onclick="qaSystem.qa_clear()"></image>
+        </div>
+    </div>
+</body>
+<script src="src/qa/index.js"></script>
+
+</html>
