@@ -5,7 +5,8 @@ var qaSystem = {
     qa_noticeData: [], //自动提示的数据源
     qa_searching: false, //是否正在查询中，用来控制用户不能高频率查询
     token: 'zdRcLtPlnBTs55KWg9KJqbBHKadYlY', //访问服务的token
-    domain: ['SRM', 'PAY', 'WZ', 'XM'] //域
+    domain: ['SRM', 'PAY', 'WZ', 'XM'], //域
+    tempDomain: []
 };
 
 //定义ajax
@@ -22,14 +23,29 @@ qaSystem.qa_my_ajax = function(opt) {
     //执行ajax查询
     $.ajax(object);
 };
-//初始化
-$(document).ready(function() {
-    //查找排名最高的500个页面作为自动提示数据源
+
+//工具方法
+qaSystem.tools = {
+    inArray: function(array, element) {
+        if (!(array instanceof Array)) return false;
+        for (var i = 0; i < array.length; i++) {　　
+            if (array[i] === element) {　　
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+//查找排名最高的知识页
+qaSystem.findTopRank = function(size) {
+    qaSystem.qa_noticeData = [];
     qaSystem.qa_my_ajax({
         url: qaSystem.qa_service_url + '/client/findTopRank',
         data: {
-            size: 500,
-            token: qaSystem.token
+            size: size,
+            token: qaSystem.token,
+            domain: qaSystem.domain.toString()
         },
         success(data) {
             if (data && data.content) {
@@ -39,34 +55,14 @@ $(document).ready(function() {
                     qaSystem.qa_noticeData.push(content[i].title);
                 }
             }
-            //初始化自动提示
-            $("#qa_value").autocomplete({
-                source: function(request, response) {
-                    var terms = request.term;
-                    if (!terms) {
-                        return;
-                    } else {
-                        terms = terms.trim().split(/\s+/g);
-                    };
-                    response($.grep(qaSystem.qa_noticeData, function(value) {
-                        var pass = true;
-                        for (var j = 0; j < terms.length; j++) {
-                            var reg = eval("/" + terms[j] + "+/i");
-                            if (!reg.test(value)) {
-                                pass = false;
-                                break;
-                            }
-                        }
-                        return pass;
-                    }));
-                },
-                position: { my: "left bottom", at: "left top" },
-                //collision: 'fit'
-            });
         },
         error(e) {}
     });
-    //查找根目录作为欢迎页内容
+}
+
+//查找根目录
+qaSystem.findRoot = function() {
+    qaSystem.qa_recommendData = [];
     qaSystem.qa_my_ajax({
         url: qaSystem.qa_service_url + '/client/findRoot',
         data: {
@@ -77,7 +73,8 @@ $(document).ready(function() {
                 var content = data.content;
                 for (var i = 0; i < content.length; i++) {
                     //把数据推入欢迎页数据源中
-                    qaSystem.qa_recommendData.push(content[i]);
+                    if (qaSystem.tools.inArray(qaSystem.domain, content[i].domain))
+                        qaSystem.qa_recommendData.push(content[i]);
                 }
             }
             //生成欢迎与推荐信息
@@ -85,13 +82,43 @@ $(document).ready(function() {
         },
         error(e) {}
     });
+}
+
+//初始化
+$(document).ready(function() {
+    //查找排名最高的500个页面作为自动提示数据源
+    qaSystem.findTopRank(500);
+    //查找根目录作为欢迎页内容
+    qaSystem.findRoot();
+    //初始化自动提示
+    $("#qa_value").autocomplete({
+        source: function(request, response) {
+            var terms = request.term;
+            if (!terms) {
+                return;
+            } else {
+                terms = terms.trim().split(/\s+/g);
+            };
+            response($.grep(qaSystem.qa_noticeData, function(value) {
+                var pass = true;
+                for (var j = 0; j < terms.length; j++) {
+                    var reg = eval("/" + terms[j] + "+/i");
+                    if (!reg.test(value)) {
+                        pass = false;
+                        break;
+                    }
+                }
+                return pass;
+            }));
+        },
+        position: { my: "left bottom", at: "left top" },
+    });
 });
 
 //查询方法
 qaSystem.qa_search = function() {
     var value = $.trim($("#qa_value").val());
-    if (!value)
-        return
+    if (!value) return;
     else if (value === 'clear') {
         $("#QaShowDiv").html('');
         $("#qa_value").val('');
@@ -269,15 +296,54 @@ qaSystem.qa_clear = function() {
 
 //点击显示或隐藏配置框的方法
 qaSystem.qa_config = function() {
-    $("#qaSettingDiv").slideToggle(1000);
+    $("#qaSettingDiv").slideToggle(500);
 }
 
+//设置临时域的方法
 qaSystem.setDomain = function() {
-    qaSystem.domain = [];
+    //清空临时域
+    qaSystem.tempDomain = [];
     var elem = $("input[name='domain']");
     for (var i = 0; i < elem.length; i++) {
         if (elem.get(i).checked) {
-            qaSystem.domain.push(elem.get(i).value);
+            qaSystem.tempDomain.push(elem.eq(i).val());
+        }
+    };
+    //显示提示
+    $("#qaSettingBtnBar").show(500);
+}
+
+//确定变更
+qaSystem.submitChange = function() {
+    if (qaSystem.tempDomain.length === 0) {
+        alert("请至少选择一个项目！");
+        return;
+    }
+    //1. 把临时域值给最终域
+    qaSystem.domain = qaSystem.tempDomain;
+    //2. 清空临时域
+    qaSystem.tempDomain = [];
+    //3. 隐藏自己
+    $("#qaSettingBtnBar").hide(500);
+    $("#QaShowDiv").html('');
+    //4. 重新查一次自动提示
+    qaSystem.findTopRank(500)
+    qaSystem.findRoot();
+}
+
+//取消变更
+qaSystem.cancelChange = function() {
+    //1. 清空临时域
+    qaSystem.tempDomain = [];
+    //2. 重新勾选域
+    var elem = $("input[name='domain']");
+    for (var i = 0; i < elem.length; i++) {
+        if (qaSystem.tools.inArray(qaSystem.domain, elem.eq(i).val())) {
+            $("input[name='domain']").eq(i).prop('checked', true);
+        } else {
+            $("input[name='domain']").eq(i).prop('checked', false);
         }
     }
+    //3. 隐藏自己
+    $("#qaSettingBtnBar").hide(500);
 }

@@ -206,21 +206,41 @@
     background-color: rgb(247, 249, 250);
     border-left: 1px solid #E5E5E5;
     z-index: 1;
-    display: none;
+    /* display: none; */
 }
 
-.qaSystem .qaSettingBtn2 {
+.qaSystem .QaDomainDiv {
+    padding: 40px 20px;
+}
+
+.qaSystem .qaSettingCommon {
     width: 100%;
     height: 30px;
     text-align: center;
     line-height: 30px;
     position: absolute;
-    bottom: 0px;
-    background-color: #6a737d;
-    color: white;
     cursor: pointer;
 }
 
-.qaSystem .QaDomainDiv {
-    padding: 40px 20px;
+.qaSystem .qaSettingHide {
+    bottom: 0px;
+    background-color: #6a737d;
+    color: white;
+}
+
+.qaSystem .qaSettingBtnBar {
+    bottom: 30px;
+    display: none;
+}
+
+.qaSystem .qaSettingBtnBar .qaSettingBtnSubmit {
+    width: 49%;
+    float: left;
+    border: 1px solid #E5E5E5;
+}
+
+.qaSystem .qaSettingBtnBar .qaSettingBtnCancel {
+    width: 49%;
+    float: right;
+    border: 1px solid #E5E5E5;
 }
