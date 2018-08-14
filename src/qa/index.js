@@ -6,7 +6,8 @@ var qaSystem = {
     qa_searching: false, //是否正在查询中，用来控制用户不能高频率查询
     token: 'zdRcLtPlnBTs55KWg9KJqbBHKadYlY', //访问服务的token
     domain: ['SRM', 'PAY', 'WZ', 'XM'], //域
-    tempDomain: []
+    tempDomain: [], //临时域
+    nullCount: 0 //查询无结果计数器
 };
 
 //定义ajax
@@ -34,6 +35,14 @@ qaSystem.tools = {
             }
         }
         return false;
+    },
+    randomString(len) {　　
+        len = len || 16;　　
+        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/ 　　
+        var maxPos = $chars.length;　　
+        var pwd = '';　　
+        for (i = 0; i < len; i++) {　　　　 pwd += $chars.charAt(Math.floor(Math.random() * maxPos));　　 }　　
+        return pwd;
     }
 }
 
@@ -120,13 +129,9 @@ qaSystem.qa_search = function() {
     var value = $.trim($("#qa_value").val());
     if (!value) return;
     else if (value === 'clear') {
-        $("#QaShowDiv").html('');
-        $("#qa_value").val('');
-        //生成欢迎与推荐信息
-        qaSystem.qa_generatelist(qaSystem.qa_recommendData, "<b>您好，欢迎使用智能顾问系统！</b>您也许想咨询以下问题：");
+        qaSystem.qa_clear();
         return;
     } else if (qaSystem.qa_searching) {
-        //如果当前正在查询中，不让再查
         qaSystem.qa_generateLeftPop('正在查询中，请稍后...');
         return;
     }
@@ -145,19 +150,28 @@ qaSystem.qa_search = function() {
             var d = data.content; //返回的节点信息
             //判断返回的节点信息title是否是你的查询值，是则说明返回的是精确查询结果
             if (d && d.title == value) {
+                //无数据计数清零
+                qaSystem.nullCount = 0;
                 //有子集就显示子集列表
                 if (d.child && d.child.length > 0) {
                     qaSystem.qa_generatelist(d.child);
                 } else {
                     //无子集，则显示节点详细
-                    qaSystem.qa_generateLeftPop(d.qaPage.htmlContent);
+                    qaSystem.qa_generateLeftPop(d.qaPage.htmlContent, true, d.treeId);
                 }
             } else if (d && d.child && d.child.length > 0) {
+                //无数据计数清零
+                qaSystem.nullCount = 0;
                 //如果返回结果是模糊查询且有值，返回模糊查询列表
                 qaSystem.qa_generatelist(d.child);
             } else {
-                qaSystem.qa_generateLeftPop("<p>抱歉，没有查询到与 <b>" + value + "</b> 有关的结果</p>" +
-                    "<p>温馨提示：我们建议您用关键字进行查询，如：\"注册\" ,可以查询与注册有关的问题</p>");
+                qaSystem.nullCount++;
+                if (qaSystem.nullCount < 3) {
+                    qaSystem.qa_generateLeftPop("<p>抱歉，没有查询到与 <b>" + value + "</b> 有关的结果</p>" +
+                        "<p>温馨提示：我们建议您用关键字进行查询，如：\"注册\" ,可以查询与注册有关的问题</p>");
+                } else {
+                    qaSystem.qa_toJira();
+                }
             }
         },
         error(e) {
@@ -205,17 +219,67 @@ qaSystem.qa_generateRightPop = function(value) {
 }
 
 //生成左侧对话栏方法
-qaSystem.qa_generateLeftPop = function(value) {
+qaSystem.qa_generateLeftPop = function(value, evaluate, nodeId) {
     var qaIcon = $("<div class='qaIcon'></div>");
     var pop = $("<div class='leftpop'></div>").html(value);
     $("#QaShowDiv").append($("<div style='width:100%;height:1px;float:left'></div>"));
     $("#QaShowDiv").append(qaIcon);
     $("#QaShowDiv").append(pop);
+    if (evaluate) {
+        var randomString = qaSystem.tools.randomString();
+        var isLike = $("<div class='qa_isLike' id='" + randomString + "'></div>");
+        var like = $("<div class='qa_likeDiv'><img class='qa_likeIcon' src='src/qa/icon/like.png'></img><br>有帮助</div>")
+            .click(function() {
+                qaSystem.setLike(nodeId, true, randomString)
+            });
+        var dislike = $("<div class='qa_likeDiv'><img class='qa_likeIcon' src='src/qa/icon/dislike.png'></img><br>没帮助</div>")
+            .click(function() {
+                qaSystem.setLike(nodeId, false, randomString)
+            });
+        isLike.append(like);
+        isLike.append(dislike);
+        $("#QaShowDiv").append(isLike);
+    }
     //图片点击放大效果
     qaSystem.qa_enLargeImage(pop);
     //如果返回数据大于350px,则默认显示350px，提供点击显示全部功能
     qaSystem.qa_handleNoticeBar(pop);
     qaSystem.qa_scrollTop();
+}
+
+//踩
+qaSystem.setLike = function(id, isLike, randomString) {
+    //后台进行保存
+    qaSystem.qa_my_ajax({
+        url: qaSystem.qa_service_url + '/client/evaluate',
+        data: {
+            token: "zdRcLtPlnBTs55KWg9KJqbBHKadYlY",
+            id: id,
+            isLike: isLike
+        },
+        type: 'POST',
+        success(data) {
+            //提示成功了
+            $(".qa_evaluate_message").show(500);
+            setTimeout(function() {
+                $(".qa_evaluate_message").hide(500);
+            }, 2000);
+            //失效掉赞和踩
+            $("#" + randomString).find("div").unbind().hide();
+        },
+        error(e) {},
+        complete() {}
+    });
+    //如果是踩，就提示是否需要用jira
+    if (!isLike)
+        qaSystem.qa_toJira();
+}
+
+//生成跳转jira提示
+qaSystem.qa_toJira = function() {
+    qaSystem.qa_generateLeftPop(
+        "<p>找不到满意的答案吗？您可以到JIRA系统寻求帮助：<br>" +
+        "<a href='http://jira.crpower.com.cn/servicedesk/customer/portals' target='_blank'>点我跳转到JIRA</a></p>");
 }
 
 //让输入框在最底下
@@ -346,4 +410,4 @@ qaSystem.cancelChange = function() {
     }
     //3. 隐藏自己
     $("#qaSettingBtnBar").hide(500);
-}
+};

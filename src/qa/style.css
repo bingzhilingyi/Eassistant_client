@@ -206,7 +206,7 @@
     background-color: rgb(247, 249, 250);
     border-left: 1px solid #E5E5E5;
     z-index: 1;
-    /* display: none; */
+    display: none;
 }
 
 .qaSystem .QaDomainDiv {
@@ -243,4 +243,35 @@
     width: 49%;
     float: right;
     border: 1px solid #E5E5E5;
+}
+
+.qaSystem .qa_isLike {
+    width: 60px;
+    height: 100px;
+    float: left;
+    padding-top: 10px;
+}
+
+.qaSystem .qa_likeDiv {
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.qaSystem .qa_likeIcon {
+    width: 40px;
+    height: 40px;
+}
+
+.qaSystem .qa_evaluate_message {
+    position: absolute;
+    top: 20px;
+    left: 350px;
+    width: 100px;
+    text-align: center;
+    z-index: 999;
+    border-radius: 5px;
+    line-height: 30px;
+    background-color: rgb(58, 174, 255);
+    color: #fff;
+    display: none;
 }
