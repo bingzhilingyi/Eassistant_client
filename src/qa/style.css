@@ -16,13 +16,14 @@
 }
 
 .qaSystem {
-    margin: 50px auto 0px;
+    margin: 0px auto;
     width: 800px;
     position: relative;
+    padding: 0px;
 }
 
 .qaSystem .QaShowDiv {
-    width: 100%;
+    width: 796;
     height: 400px;
     border: 2px solid #E5E5E5;
     overflow-y: scroll;
@@ -31,7 +32,7 @@
 }
 
 .qaSystem .QaSearchDiv {
-    width: 780px;
+    width: 776px;
     border: 2px solid #E5E5E5;
     padding: 10px;
 }
@@ -246,7 +247,7 @@
 }
 
 .qaSystem .qa_isLike {
-    width: 60px;
+    width: 50px;
     height: 100px;
     float: left;
     padding-top: 10px;
@@ -260,6 +261,15 @@
 .qaSystem .qa_likeIcon {
     width: 40px;
     height: 40px;
+    background-image: url(icon/like.png);
+    background-size: 100%;
+}
+
+.qaSystem .qa_dislikeIcon {
+    width: 40px;
+    height: 40px;
+    background-image: url(icon/dislike.png);
+    background-size: 100%;
 }
 
 .qaSystem .qa_evaluate_message {

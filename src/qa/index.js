@@ -1,5 +1,5 @@
 var qaSystem = {
-    //qa_service_url: "http://10.61.16.29:8522/qa", //服务地址
+    //qa_service_url: "http://10.61.16.29:8522/qa", //服务地址 
     qa_service_url: "http://localhost:8080/qa", //服务地址
     qa_recommendData: [], //推荐的数据源
     qa_noticeData: [], //自动提示的数据源
@@ -228,11 +228,11 @@ qaSystem.qa_generateLeftPop = function(value, evaluate, nodeId) {
     if (evaluate) {
         var randomString = qaSystem.tools.randomString();
         var isLike = $("<div class='qa_isLike' id='" + randomString + "'></div>");
-        var like = $("<div class='qa_likeDiv'><img class='qa_likeIcon' src='src/qa/icon/like.png'></img><br>有帮助</div>")
+        var like = $("<div class='qa_likeDiv'><div class='qa_likeIcon'></div>有帮助</div>")
             .click(function() {
                 qaSystem.setLike(nodeId, true, randomString)
             });
-        var dislike = $("<div class='qa_likeDiv'><img class='qa_likeIcon' src='src/qa/icon/dislike.png'></img><br>没帮助</div>")
+        var dislike = $("<div class='qa_likeDiv'><div class='qa_dislikeIcon'></div>没帮助</div>")
             .click(function() {
                 qaSystem.setLike(nodeId, false, randomString)
             });
