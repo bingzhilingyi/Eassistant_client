@@ -1,6 +1,7 @@
 var qaSystem = {
-    //qa_service_url: "http://10.61.16.29:8522/qa", //服务地址 
-    qa_service_url: "http://localhost:8080/qa", //服务地址
+    //qa_service_url: "http://10.61.16.29:8532/qa", //服务地址 pro
+    qa_service_url: "http://10.61.16.29:8522/qa", //服务地址 sit
+    //qa_service_url: "http://localhost:8080/qa", //服务地址
     qa_recommendData: [], //推荐的数据源
     qa_noticeData: [], //自动提示的数据源
     qa_searching: false, //是否正在查询中，用来控制用户不能高频率查询
