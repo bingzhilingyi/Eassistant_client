@@ -39,7 +39,7 @@ qaSystem.tools = {
         }
         return false;
     },
-    randomString(len) {　　
+    randomString: function(len) {　　
         len = len || 16;　　
         var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/ 　　
         var maxPos = $chars.length;　　
@@ -59,7 +59,7 @@ qaSystem.findTopRank = function(size) {
             token: qaSystem.token,
             domain: qaSystem.domain.toString()
         },
-        success(data) {
+        success: function(data) {
             if (data && data.content) {
                 var content = data.content;
                 for (var i = 0; i < content.length; i++) {
@@ -68,7 +68,7 @@ qaSystem.findTopRank = function(size) {
                 }
             }
         },
-        error(e) {}
+        error: function(e) {}
     });
 }
 
@@ -80,7 +80,7 @@ qaSystem.findRoot = function() {
         data: {
             token: qaSystem.token
         },
-        success(data) {
+        success: function(data) {
             if (data && data.content) {
                 var content = data.content;
                 for (var i = 0; i < content.length; i++) {
@@ -92,7 +92,7 @@ qaSystem.findRoot = function() {
             //生成欢迎与推荐信息
             qaSystem.qa_generatelist(qaSystem.qa_recommendData, "<b>您好，欢迎使用智能顾问系统！</b>您也许想咨询以下问题：");
         },
-        error(e) {}
+        error: function(e) {}
     });
 }
 
@@ -149,7 +149,7 @@ qaSystem.qa_search = function() {
             token: "zdRcLtPlnBTs55KWg9KJqbBHKadYlY",
             domain: qaSystem.domain.toString()
         },
-        success(data) {
+        success: function(data) {
             var d = data.content; //返回的节点信息
             //判断返回的节点信息title是否是你的查询值，是则说明返回的是精确查询结果
             if (d && d.title == value) {
@@ -177,10 +177,10 @@ qaSystem.qa_search = function() {
                 }
             }
         },
-        error(e) {
+        error: function(e) {
             qaSystem.qa_generateLeftPop("抱歉，查询出错了...");
         },
-        complete() {
+        complete: function() {
             //把查询中设置为否
             qaSystem.qa_searching = false;
         }
@@ -261,7 +261,7 @@ qaSystem.setLike = function(id, isLike, randomString) {
             isLike: isLike
         },
         type: 'POST',
-        success(data) {
+        success: function(data) {
             //提示成功了
             $(".qa_evaluate_message").show(500);
             setTimeout(function() {
@@ -270,8 +270,8 @@ qaSystem.setLike = function(id, isLike, randomString) {
             //失效掉赞和踩
             $("#" + randomString).find("div").unbind().hide();
         },
-        error(e) {},
-        complete() {}
+        error: function(e) {},
+        complete: function() {}
     });
     //如果是踩，就提示是否需要用jira
     if (!isLike)
