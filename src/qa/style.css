@@ -115,14 +115,17 @@
     height: 40px;
     text-align: center;
     line-height: 40px;
+    /* background-image: url(icon/myIcon.png);
+    background-size: 40px 40px; */
 }
 
 .qaSystem .qaIcon {
     border-radius: 40px;
     width: 40px;
     height: 40px;
-    background-image: url(icon/support.png);
-    background-position-x: -12px;
+    background-image: url(icon/myIcon.png);
+    background-size: 40px 40px;
+    /* background-position-x: -12px; */
     float: left;
     margin: 10px;
 }

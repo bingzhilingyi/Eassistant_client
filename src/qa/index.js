@@ -6,7 +6,9 @@ var qaSystem = {
     qa_noticeData: [], //自动提示的数据源
     qa_searching: false, //是否正在查询中，用来控制用户不能高频率查询
     token: 'zdRcLtPlnBTs55KWg9KJqbBHKadYlY', //访问服务的token
-    domain: ['SRM', 'PAY', 'WZ', 'XM'], //域
+    domain: [
+        'SRM', 'PAY' //, 'WZ', 'XM'
+    ], //域
     tempDomain: [], //临时域
     nullCount: 0 //查询无结果计数器
 };
@@ -211,7 +213,7 @@ qaSystem.qa_generatelist = function(data, message, appendMessage) {
 
 //生成右侧对话栏方法
 qaSystem.qa_generateRightPop = function(value) {
-    var myIcon = $("<div class='myIcon right'></div>").text('我');
+    var myIcon = $("<div class='myIcon right'></div>").html("我");
     var pop = $("<div class='rightpop right'></div>").text(value);
     $("#QaShowDiv").append($("<div style='width:100%;height:1px;float:left'></div>"));
     $("#QaShowDiv").append(myIcon);
@@ -279,8 +281,8 @@ qaSystem.setLike = function(id, isLike, randomString) {
 //生成跳转jira提示
 qaSystem.qa_toJira = function() {
     qaSystem.qa_generateLeftPop(
-        "<p>找不到满意的答案吗？您可以到JIRA系统寻求帮助：<br>" +
-        "<a href='http://jira.crpower.com.cn/servicedesk/customer/portals' target='_blank'>点我跳转到JIRA</a></p>");
+        "<p>找不到满意的答案吗？您可以到“<b>华润电力信息系统统一服务中心</b>”寻求帮助：<br>" +
+        "<a href='http://jira.crpower.com.cn/servicedesk/customer/portals' target='_blank'>点我跳转到“华润电力信息系统统一服务中心”</a></p>");
 }
 
 //让输入框在最底下
