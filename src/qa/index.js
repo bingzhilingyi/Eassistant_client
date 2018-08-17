@@ -146,7 +146,7 @@ qaSystem.qa_search = function() {
         url: qaSystem.qa_service_url + '/client/findByTitle',
         data: {
             title: value,
-            token: "zdRcLtPlnBTs55KWg9KJqbBHKadYlY",
+            token: qaSystem.token,
             domain: qaSystem.domain.toString()
         },
         success: function(data) {
@@ -256,7 +256,7 @@ qaSystem.setLike = function(id, isLike, randomString) {
     qaSystem.qa_my_ajax({
         url: qaSystem.qa_service_url + '/client/evaluate',
         data: {
-            token: "zdRcLtPlnBTs55KWg9KJqbBHKadYlY",
+            token: qaSystem.token,
             id: id,
             isLike: isLike
         },
