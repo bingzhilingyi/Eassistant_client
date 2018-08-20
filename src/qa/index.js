@@ -109,7 +109,7 @@ $(document).ready(function() {
             if (!terms) {
                 return;
             } else {
-                terms = terms.trim().split(/\s+/g);
+                terms = terms.split(/\s+/g);
             };
             response($.grep(qaSystem.qa_noticeData, function(value) {
                 var pass = true;
@@ -223,7 +223,7 @@ qaSystem.qa_generateRightPop = function(value) {
 
 //生成左侧对话栏方法
 qaSystem.qa_generateLeftPop = function(value, evaluate, nodeId) {
-    var qaIcon = $("<div class='qaIcon'></div>");
+    var qaIcon = $("<div class='qaIcon'><img  style='width: 40px;height:40px' src='src/qa/icon/myIcon.png'></div>");
     var pop = $("<div class='leftpop'></div>").html(value);
     $("#QaShowDiv").append($("<div style='width:100%;height:1px;float:left'></div>"));
     $("#QaShowDiv").append(qaIcon);
@@ -231,11 +231,11 @@ qaSystem.qa_generateLeftPop = function(value, evaluate, nodeId) {
     if (evaluate) {
         var randomString = qaSystem.tools.randomString();
         var isLike = $("<div class='qa_isLike' id='" + randomString + "'></div>");
-        var like = $("<div class='qa_likeDiv'><div class='qa_likeIcon'></div>有帮助</div>")
+        var like = $("<div class='qa_likeDiv'><div class='qa_likeIcon'><img  style='width: 40px;height:40px' src='src/qa/icon/like.png'></div>有帮助</div>")
             .click(function() {
                 qaSystem.setLike(nodeId, true, randomString)
             });
-        var dislike = $("<div class='qa_likeDiv'><div class='qa_dislikeIcon'></div>没帮助</div>")
+        var dislike = $("<div class='qa_likeDiv'><div class='qa_dislikeIcon'><img  style='width: 40px;height:40px' src='src/qa/icon/dislike.png'></div>没帮助</div>")
             .click(function() {
                 qaSystem.setLike(nodeId, false, randomString)
             });

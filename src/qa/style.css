@@ -82,11 +82,11 @@
 .qaSystem .childrenItem:hover {
     cursor: pointer;
     color: #00a2ca;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .qaSystem .ui-menu-item {
-    font-size: 12px;
+    font-size: 15px;
     color: #00a2ca;
 }
 
@@ -123,8 +123,8 @@
     border-radius: 40px;
     width: 40px;
     height: 40px;
-    background-image: url(icon/myIcon.png);
-    background-size: 40px 40px;
+    /* background-image: url(icon/myIcon.png);
+    background-size: 40px 40px; */
     /* background-position-x: -12px; */
     float: left;
     margin: 10px;
@@ -264,15 +264,15 @@
 .qaSystem .qa_likeIcon {
     width: 40px;
     height: 40px;
-    background-image: url(icon/like.png);
-    background-size: 100%;
+    /* background-image: url(icon/like.png);
+    background-size: 100%; */
 }
 
 .qaSystem .qa_dislikeIcon {
     width: 40px;
     height: 40px;
-    background-image: url(icon/dislike.png);
-    background-size: 100%;
+    /* background-image: url(icon/dislike.png);
+    background-size: 100%; */
 }
 
 .qaSystem .qa_evaluate_message {
