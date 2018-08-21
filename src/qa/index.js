@@ -90,7 +90,7 @@ qaSystem.findRoot = function() {
                 }
             }
             //生成欢迎与推荐信息
-            qaSystem.qa_generatelist(qaSystem.qa_recommendData, "<b>您好，欢迎使用智能顾问系统！</b>您也许想咨询以下问题：");
+            qaSystem.qa_generatelist(qaSystem.qa_recommendData, "<b>您好，欢迎使用自动问答系统！</b>您也许想咨询以下问题：");
         },
         error: function(e) {}
     });
@@ -356,7 +356,7 @@ qaSystem.qa_enLargeImage = function(pop) {
 qaSystem.qa_clear = function() {
     $("#QaShowDiv").html('');
     //生成欢迎与推荐信息
-    qaSystem.qa_generatelist(qaSystem.qa_recommendData, "<b>您好，欢迎使用自动应答系统！</b>您也许想咨询以下问题：");
+    qaSystem.qa_generatelist(qaSystem.qa_recommendData, "<b>您好，欢迎使用自动问答系统！</b>您也许想咨询以下问题：");
     //清空输入栏
     $("#qa_value").val('');
 }
