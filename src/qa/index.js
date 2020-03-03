@@ -5,7 +5,7 @@ var qaSystem = {
     qa_recommendData: [], //推荐的数据源
     qa_noticeData: [], //自动提示的数据源
     qa_searching: false, //是否正在查询中，用来控制用户不能高频率查询
-    token: 'zdRcLtPlnBTs55KWg9KJqbBHKadYlY', //访问服务的token
+    token: '', //访问服务的token
     domain: [
         'SRM', 'PAY' //, 'WZ', 'XM'
     ], //域
