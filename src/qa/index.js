@@ -281,8 +281,8 @@ qaSystem.setLike = function(id, isLike, randomString) {
 //生成跳转jira提示
 qaSystem.qa_toJira = function() {
     qaSystem.qa_generateLeftPop(
-        "<p>找不到满意的答案吗？您可以到“<b>华润电力信息系统统一服务中心</b>”寻求帮助：<br>" +
-        "<a href='http://jira.crpower.com.cn/servicedesk/customer/portals' target='_blank'>点我跳转到“华润电力信息系统统一服务中心”</a></p>");
+        "<p>找不到满意的答案吗？您可以到“<b>统一服务中心</b>”寻求帮助：<br>" +
+        "<a href='' target='_blank'>点我跳转到“统一服务中心”</a></p>");
 }
 
 //让输入框在最底下
